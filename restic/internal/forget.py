@@ -14,7 +14,10 @@ def run(restic_base_command,
         keep_monthly=None,
         keep_yearly=None,
         keep_within=None,
-        prune=False):
+        prune=False,
+        tags=None,
+        repository=None,
+        password_file=None):
     cmd = restic_base_command + ['forget']
 
     if dry_run:
@@ -46,6 +49,16 @@ def run(restic_base_command,
 
     if prune:
         cmd.extend(['--prune'])
+
+    if tags:
+        for tag in tags:
+            cmd.extend(['--tag', tag])
+
+    if repository:
+        cmd.extend(['--repo', repository])
+
+    if password_file:
+        cmd.extend(['--password-file', password_file])
 
     return _parse_result(command_executor.execute(cmd))
 
