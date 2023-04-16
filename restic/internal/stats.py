@@ -3,7 +3,12 @@ import json
 from restic.internal import command_executor
 
 
-def run(restic_base_command, mode=None, tags=None, host=None):
+def run(restic_base_command,
+        mode=None,
+        tags=None,
+        host=None,
+        repository=None,
+        password_file=None):
     cmd = restic_base_command + ['stats']
 
     if mode:
@@ -15,5 +20,11 @@ def run(restic_base_command, mode=None, tags=None, host=None):
 
     if host:
         cmd.extend(['--host', host])
+
+    if repository:
+        cmd.extend(['--repo', repository])
+
+    if password_file:
+        cmd.extend(['--password-file', password_file])
 
     return json.loads(command_executor.execute(cmd))
