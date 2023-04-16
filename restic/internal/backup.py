@@ -18,7 +18,9 @@ def run(restic_base_command,
         tags=None,
         dry_run=None,
         host=None,
-        scan=True):
+        scan=True,
+        repository=None,
+        password_file=None):
     cmd = restic_base_command + ['backup'] + paths
 
     if exclude_patterns:
@@ -41,6 +43,12 @@ def run(restic_base_command,
 
     if not scan:
         cmd.extend(['--no-scan'])
+
+    if repository:
+        cmd.extend(['--repo', repository])
+
+    if password_file:
+        cmd.extend(['--password-file', password_file])
 
     result_raw = command_executor.execute(cmd)
     return _parse_result(result_raw)

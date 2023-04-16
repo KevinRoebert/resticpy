@@ -76,8 +76,8 @@ def stats(*args, **kwargs):
     return internal_stats.run(_make_base_command(), *args, **kwargs)
 
 
-def unlock():
-    return internal_unlock.run(_make_base_command())
+def unlock(*args, **kwargs):
+    return internal_unlock.run(_make_base_command(), *args, **kwargs)
 
 
 def version():
