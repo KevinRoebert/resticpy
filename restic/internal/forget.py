@@ -17,7 +17,9 @@ def run(restic_base_command,
         keep_yearly=None,
         keep_within=None,
         snapshot_id=None,
-        prune=False):
+        prune=False,
+        repository=None,
+        password_file=None):
     cmd = restic_base_command + ['forget']
 
     if dry_run:
@@ -61,6 +63,12 @@ def run(restic_base_command,
 
     if snapshot_id:
         cmd.extend([snapshot_id])
+
+    if repository:
+        cmd.extend(['--repo', repository])
+
+    if password_file:
+        cmd.extend(['--password-file', password_file])
 
     return _parse_result(command_executor.execute(cmd))
 
