@@ -72,3 +72,22 @@ class SelfUpdateTest(unittest.TestCase):
 
         mock_execute.assert_called_with(
             ['restic', '--json', 'stats', '--host', 'myhost'])
+
+    @mock.patch.object(stats.command_executor, 'execute')
+    def test_stats_with_repository_and_password_file(self, mock_execute):
+        mock_execute.return_value = """{
+            "total_size": 10,
+            "total_file_count": 2
+            }
+            """
+
+        self.assertEqual({
+            'total_size': 10,
+            'total_file_count': 2
+        }, restic.stats(repository='/dummy/repo/path',
+                        password_file='secret-pw.txt'))
+
+        mock_execute.assert_called_with([
+            'restic', '--json', 'stats', '--repo', '/dummy/repo/path',
+            '--password-file', 'secret-pw.txt'
+        ])

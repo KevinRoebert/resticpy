@@ -39,6 +39,19 @@ class BackupTest(unittest.TestCase):
             ['restic', '--json', 'backup', '/tmp/dummy-file.txt'])
 
     @mock.patch.object(backup.command_executor, 'execute')
+    def test_backup_with_repository_and_password_file(self, mock_execute):
+        mock_execute.return_value = '{}'
+
+        restic.backup(paths=['/tmp/dummy-file.txt'],
+                      repository='/dummy/repo/path',
+                      password_file='secret-pw.txt')
+
+        mock_execute.assert_called_with([
+            'restic', '--json', 'backup', '/tmp/dummy-file.txt', '--repo',
+            '/dummy/repo/path', '--password-file', 'secret-pw.txt'
+        ])
+
+    @mock.patch.object(backup.command_executor, 'execute')
     def test_backup_multiple_paths(self, mock_execute):
         mock_execute.return_value = '{}'
 
